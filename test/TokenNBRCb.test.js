@@ -1,18 +1,18 @@
 //testing environment
-const Token = artifacts.require("./Token");
+let TokenNBRCb = artifacts.require("./TokenNBRCb");
 
 require("chai").use(require("chai-as-promised")).should();
 
-contract("Token", (accounts) => {
-  const name = "Nobrac Beta";
-  const symbol = "Symbol";
-  const decimals = "18";
-  const totalSupply = "1000000000000000000";
+contract("TokenNBRCb", (accounts) => {
   let token;
+  const name = "Nobrac";
+  const symbol = "NBRCb";
+  const decimals = "18";
+  const totalSupply = "1000000000000000000000000";
 
   //before , itireate once through token.new()
   beforeEach(async () => {
-    const token = await Token.new();
+    token = await TokenNBRCb.new();
   });
 
   //'accounts' from all the personal blockchain

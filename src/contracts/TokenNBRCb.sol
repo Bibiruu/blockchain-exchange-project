@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity ^0.8.12;
 
-contract Token {
-    string public name = "Nobrac Beta";
+contract TokenNBRCb {
+    string public name = "Nobrac";
     string public symbol = "NBRCb";
     uint256 public decimals = 18;
     uint256 public totalSupply;
