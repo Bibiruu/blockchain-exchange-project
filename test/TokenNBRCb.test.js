@@ -1,5 +1,5 @@
 //chai testing environment
-import { tokens } from "./helpers";
+import { tokens, EVM_REVERT } from "./helpers";
 
 let TokenNBRCb = artifacts.require("./TokenNBRCb");
 
@@ -38,36 +38,67 @@ contract("TokenNBRCb", ([deployer, receiver]) => {
       const result = await token.totalSupply();
       result.toString().should.equal(totalSupply.toString());
     });
-    it("assings the total supply to the deployer", async () => {
+    it("assigns the total supply to the deployer", async () => {
       const result = await token.balanceOf(deployer);
       result.toString().should.equal(totalSupply.toString());
     });
   });
 
   describe("sending tokens", () => {
-    it("transfer token balances", async () => {
-      let balanceOf;
-      /*before transfer
-      balanceOf = await token.balanceOf(deployer);
-      console.log("deployer balance before transfer", balanceOf.toString());
-      balanceOf = await token.balanceOf(receiver);
-      console.log("receiver balance before transfer", balanceOf.toString());*/
-      //transfer
-      //from:deployer - metadata, web3 concept
-      await token.transfer(receiver, tokens(100), {
-        from: deployer,
+    let result;
+    let amount;
+
+    describe("success", async () => {
+      beforeEach(async () => {
+        amount = tokens(100);
+        result = await token.transfer(receiver, amount, { from: deployer });
       });
 
-      //after transfer
-      balanceOf = await token.balanceOf(deployer);
-      //million - 100 tokens = 999900
-      balanceOf.toString().should.equal(tokens(999900).toString());
-      console.log("deployer balance after transfer", balanceOf.toString());
-      balanceOf = await token.balanceOf(receiver);
-      balanceOf.toString().should.equal(tokens(100).toString());
-      console.log("receiver balance after transfer", balanceOf.toString());
+      it("transfers token balances", async () => {
+        let balanceOf;
+        /*before transfer
+        balanceOf = await token.balanceOf(deployer);
+        console.log("deployer balance before transfer", balanceOf.toString());
+        balanceOf = await token.balanceOf(receiver);
+        console.log("receiver balance before transfer", balanceOf.toString());*/
+        //transfer
+        //from:deployer - metadata, web3 concept
+        //after transfer
+        balanceOf = await token.balanceOf(deployer);
+        //million - 100 tokens = 999900
+        balanceOf.toString().should.equal(tokens(999900).toString());
+        console.log("deployer balance after transfer", balanceOf.toString());
+        balanceOf = await token.balanceOf(receiver);
+        balanceOf.toString().should.equal(tokens(100).toString());
+        console.log("receiver balance after transfer", balanceOf.toString());
+        //balance
+      });
+      it("emits a transfer event", async () => {
+        const log = result.logs[0]; //after result has a feat of logs.
+        log.event.should.eq("Transfer");
+        const event = log.args;
+        event.from.toString().should.equal(deployer, "from is correct");
+        event.to.should.equal(receiver, "to is correct");
+        event.value
+          .toString()
+          .should.equal(amount.toString(), "value is correct");
+      });
+    });
 
-      //balance
+    describe("failure", async () => {
+      it("it rejects insuficient balances", async () => {
+        let invalidAmount;
+        invalidAmount = tokens(100000000); //100 +million - greater than total supply
+        await token
+          .transfer(receiver, invalidAmount, { from: deployer })
+          .should.be.rejectedWith(EVM_REVERT);
+
+        //attempt transfer tokens, when you have more
+        invalidAmount = tokens(10);
+        await token
+          .transfer(deployer, invalidAmount, { from: receiver })
+          .should.be.rejectedWith(EVM_REVERT);
+      });
     });
   });
 });

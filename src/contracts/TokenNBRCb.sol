@@ -2,12 +2,17 @@
 pragma solidity ^0.8.12;
 
 contract TokenNBRCb {
+    //variables
     string public name = "Nobrac";
     string public symbol = "NBRCb";
     uint256 public decimals = 18;
     uint256 public totalSupply;
 
     mapping(address => uint256) public balanceOf;
+
+    //events
+    //indexed, subscribing pertaining to us
+    event Transfer(address indexed from, address indexed to, uint256 value);
 
     constructor() {
         totalSupply = 1000000 * (10**decimals);
@@ -18,8 +23,10 @@ contract TokenNBRCb {
         public
         returns (bool success)
     {
+        require(balanceOf[msg.sender] >= _value); // have to have tokens or else error
         balanceOf[msg.sender] = balanceOf[msg.sender] - _value; //decrease balance
         balanceOf[_to] = balanceOf[_to] + _value; // increase to balance
+        emit Transfer(msg.sender, _to, _value); // event trigger
         return true;
     }
 }
