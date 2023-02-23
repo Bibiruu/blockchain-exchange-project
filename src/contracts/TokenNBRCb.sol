@@ -23,7 +23,9 @@ contract TokenNBRCb {
         public
         returns (bool success)
     {
+        require(_to != address(0)); //no invalid address
         require(balanceOf[msg.sender] >= _value); // have to have tokens or else error
+
         balanceOf[msg.sender] = balanceOf[msg.sender] - _value; //decrease balance
         balanceOf[_to] = balanceOf[_to] + _value; // increase to balance
         emit Transfer(msg.sender, _to, _value); // event trigger

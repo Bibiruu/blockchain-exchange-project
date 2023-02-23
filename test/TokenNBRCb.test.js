@@ -73,6 +73,7 @@ contract("TokenNBRCb", ([deployer, receiver]) => {
         console.log("receiver balance after transfer", balanceOf.toString());
         //balance
       });
+
       it("emits a transfer event", async () => {
         const log = result.logs[0]; //after result has a feat of logs.
         log.event.should.eq("Transfer");
@@ -85,19 +86,23 @@ contract("TokenNBRCb", ([deployer, receiver]) => {
       });
     });
 
-    describe("failure", async () => {
-      it("it rejects insuficient balances", async () => {
+    describe("failure", () => {
+      it("it rejects insufficient balances", async () => {
         let invalidAmount;
         invalidAmount = tokens(100000000); //100 +million - greater than total supply
         await token
           .transfer(receiver, invalidAmount, { from: deployer })
           .should.be.rejectedWith(EVM_REVERT);
 
-        //attempt transfer tokens, when you have more
-        invalidAmount = tokens(10);
+        // Attempt transfer tokens, when you have none
+        invalidAmount = tokens(10); // recipient has no tokens, testing for "fake 10"
         await token
           .transfer(deployer, invalidAmount, { from: receiver })
           .should.be.rejectedWith(EVM_REVERT);
+      });
+      it("rejects invalid recipients", async () => {
+        await token.transfer(0x0, amount, { from: deployer }).should.be //0x0 = invalid address
+          .rejected;
       });
     });
   });
