@@ -34,6 +34,14 @@ contract TokenNBRCb {
     }
 
     //approve tokens, allowing to spend
+    function approve(address _spender, uint256 _value)
+        public
+        returns (bool success)
+    {
+        //require(_spender != address(0));
+        allowance[msg.sender][_spender] = _value;
+        return true;
+    }
 
     //transfer from others
 }

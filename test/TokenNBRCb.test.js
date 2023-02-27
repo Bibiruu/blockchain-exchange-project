@@ -114,14 +114,16 @@ contract("TokenNBRCb", ([deployer, receiver, exchange]) => {
     beforeEach(async () => {
       //getting value + checking
       amount = tokens(100);
-      result = await TokenNBRCb.approve(exchange, amount, { from: deployer }); //deployer approving the amount of 100 tokens.
+      result = await TokenNBRCb.approve(exchange, amount, { from: deployer }); //deployer approve the exchange w/ amount (100tokens)
     });
 
     describe("success", () => {
-      it("allocates and allowance for delegated token spending", async () => {
-        const allowance = await token.allowance(deployer, exchange);
-        allowance.toString().should.equal(amount.toString()); // checking if tokens added to the allownce
-      });
+      beforeEach(async () => {
+        it("allocates and allowance for delegated token spending", async () => {
+          const allowance = await TokenNBRCb.allowance(deployer, exchange); //after approval added to tthe exchange
+          allowance.toString().should.equal(amount.toString()); // checking if tokens added to the allownce
+        });
+      })
     });
 
     describe("failure", () => {});
