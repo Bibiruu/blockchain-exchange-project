@@ -9,6 +9,7 @@ contract TokenNBRCb {
     uint256 public totalSupply;
 
     mapping(address => uint256) public balanceOf;
+    mapping(address => mapping(address => uint256)) public allowance; //how many tokens is allowed to expend, second address is the exchange.
 
     //events
     //indexed, subscribing pertaining to us
@@ -31,4 +32,8 @@ contract TokenNBRCb {
         emit Transfer(msg.sender, _to, _value); // event trigger
         return true;
     }
+
+    //approve tokens, allowing to spend
+
+    //transfer from others
 }

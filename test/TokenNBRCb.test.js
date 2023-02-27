@@ -5,7 +5,7 @@ let TokenNBRCb = artifacts.require("./TokenNBRCb");
 
 require("chai").use(require("chai-as-promised")).should();
 
-contract("TokenNBRCb", ([deployer, receiver]) => {
+contract("TokenNBRCb", ([deployer, receiver, exchange]) => {
   let token;
   const name = "Nobrac";
   const symbol = "NBRCb";
@@ -105,5 +105,25 @@ contract("TokenNBRCb", ([deployer, receiver]) => {
           .rejected;
       });
     });
+  });
+
+  describe('("approving tokens")', () => {
+    let result;
+    let amount;
+
+    beforeEach(async () => {
+      //getting value + checking
+      amount = tokens(100);
+      result = await TokenNBRCb.approve(exchange, amount, { from: deployer }); //deployer approving the amount of 100 tokens.
+    });
+
+    describe("success", () => {
+      it("allocates and allowance for delegated token spending", async () => {
+        const allowance = await token.allowance(deployer, exchange);
+        allowance.toString().should.equal(amount.toString()); // checking if tokens added to the allownce
+      });
+    });
+
+    describe("failure", () => {});
   });
 });
