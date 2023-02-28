@@ -14,6 +14,8 @@ contract TokenNBRCb {
     //events
     //indexed, subscribing pertaining to us
     event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
+
 
     constructor() {
         totalSupply = 1000000 * (10**decimals);
@@ -38,8 +40,9 @@ contract TokenNBRCb {
         public
         returns (bool success)
     {
-        //require(_spender != address(0));
+        require(_spender != address(0));
         allowance[msg.sender][_spender] = _value;
+        emit Approval(msg.sender, _spender, _value);
         return true;
     }
 

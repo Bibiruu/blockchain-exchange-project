@@ -119,13 +119,29 @@ contract("TokenNBRCb", ([deployer, receiver, exchange]) => {
 
     describe("success", () => {
       beforeEach(async () => {
-        it("allocates and allowance for delegated token spending", async () => {
+        it("allocates an allowance for delegated token spending on exchange", async () => {
           const allowance = await TokenNBRCb.allowance(deployer, exchange); //after approval added to tthe exchange
           allowance.toString().should.equal(amount.toString()); // checking if tokens added to the allownce
         });
-      })
+
+        it("emits on Approval event", async () => {
+          const log = result.logs[0];
+          log.event.should.sq("Approval");
+          const event = log.args;
+          event.owner.toString().should.equal("owner is correct");
+          event.spender.should.equal(exchange, "spender is correct");
+          event.value.toString().should.equal(amount.toString(), "value is");
+        });
+      });
     });
 
-    describe("failure", () => {});
+    describe("failure", () => {
+      beforeEach(() => {
+        it("rejects approval of event", async () => {
+          await TokenNBRCb.approve(0x0, amount, { from: deployer }).should.be
+            .rejected;
+        });
+      });
+    });
   });
 });
