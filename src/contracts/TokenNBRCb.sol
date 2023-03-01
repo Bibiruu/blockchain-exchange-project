@@ -14,8 +14,11 @@ contract TokenNBRCb {
     //events
     //indexed, subscribing pertaining to us
     event Transfer(address indexed from, address indexed to, uint256 value);
-    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
-
+    event Approval(
+        address indexed _owner,
+        address indexed _spender,
+        uint256 _value
+    );
 
     constructor() {
         totalSupply = 1000000 * (10**decimals);
@@ -26,13 +29,21 @@ contract TokenNBRCb {
         public
         returns (bool success)
     {
-        require(_to != address(0)); //no invalid address
         require(balanceOf[msg.sender] >= _value); // have to have tokens or else error
-
-        balanceOf[msg.sender] = balanceOf[msg.sender] - _value; //decrease balance
-        balanceOf[_to] = balanceOf[_to] + _value; // increase to balance
-        emit Transfer(msg.sender, _to, _value); // event trigger
+        _transfer(msg.sender, _to, _value);
         return true;
+    }
+
+    // this is an internal function only
+    function _transfer(
+        address _from,
+        address _to,
+        uint256 _value
+    ) internal {
+        require(_to != address(0)); //no invalid address
+        balanceOf[_from] = balanceOf[_from] - _value; //decrease balance
+        balanceOf[_to] = balanceOf[_to] + _value; // increase to balance
+        emit Transfer(_from, _to, _value); // event trigger
     }
 
     //approve tokens, allowing to spend
@@ -40,11 +51,19 @@ contract TokenNBRCb {
         public
         returns (bool success)
     {
-        require(_spender != address(0));
+        require(_spender != address(0)); // address validation
         allowance[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value);
         return true;
     }
 
     //transfer from others
+    function transferFrom(
+        address _from,
+        address _to,
+        uint256 _value
+    ) public returns (bool success) {
+        _transfer(_from, _to, _value);
+        return true;
+    }
 }
