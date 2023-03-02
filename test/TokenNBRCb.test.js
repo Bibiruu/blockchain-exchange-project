@@ -170,6 +170,11 @@ contract("TokenNBRCb", ([deployer, receiver, exchange]) => {
           balanceOf.toString().should.equal(tokens(100).toString());
           console.log("receiver balance after transfer", balanceOf.toString());
         });
+
+        it("reserts the allowance", async () => {
+          const allowance = await TokenNBRCb.allowance(deployer, exchange); //after approval added to tthe exchange
+          allowance.toString().should.equal("0"); // checking if tokens added to the allownce
+        });
       });
 
       it("emits a transfer event", async () => {
