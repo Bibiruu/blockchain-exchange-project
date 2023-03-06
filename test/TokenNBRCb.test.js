@@ -67,11 +67,10 @@ contract("TokenNBRCb", ([deployer, receiver, exchange]) => {
         balanceOf = await token.balanceOf(deployer);
         //million - 100 tokens = 999900
         balanceOf.toString().should.equal(tokens(999900).toString());
-        console.log("deployer balance after transfer", balanceOf.toString());
+        //console.log("deployer balance after transfer", balanceOf.toString());
         balanceOf = await token.balanceOf(receiver);
         balanceOf.toString().should.equal(tokens(100).toString());
-        console.log("receiver balance after transfer", balanceOf.toString());
-        //balance
+        //console.log("receiver balance after transfer", balanceOf.toString());
       });
 
       it("emits a transfer event", async () => {
@@ -145,7 +144,7 @@ contract("TokenNBRCb", ([deployer, receiver, exchange]) => {
     });
   });
 
-  describe("sending tokens", () => {
+  describe("delegated token transfers", () => {
     let result;
     let amount;
 
@@ -189,24 +188,18 @@ contract("TokenNBRCb", ([deployer, receiver, exchange]) => {
       });
     });
 
-    /*describe("failure", () => {
-      it("it rejects insufficient balances", async () => {
-        let invalidAmount;
-        invalidAmount = tokens(100000000); //100 +million - greater than total supply
+    describe("failure", () => {
+      it("rejects insufficient balances", async () => {
+        //attempt transfer too many tokens
+        const invalidAmount = tokens(100000000); //100 +million - greater than total supply
         await token
-          .transfer(receiver, invalidAmount, { from: deployer })
-          .should.be.rejectedWith(EVM_REVERT);
-
-        // Attempt transfer tokens, when you have none
-        invalidAmount = tokens(10); // recipient has no tokens, testing for "fake 10"
-        await token
-          .transfer(deployer, invalidAmount, { from: receiver })
+          .transferFrom(deployer, receiver, invalidAmount, { from: exchange })
           .should.be.rejectedWith(EVM_REVERT);
       });
       it("rejects invalid recipients", async () => {
-        await token.transfer(0x0, amount, { from: deployer }).should.be //0x0 = invalid address
-          .rejected;
+        await token.transferFrom(deployer, 0x0, amount, { from: exchange })
+          .should.be.rejected; //0x0 = invalid address
       });
-    });*/
+    });
   });
 });
