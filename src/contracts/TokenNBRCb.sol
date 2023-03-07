@@ -63,6 +63,9 @@ contract TokenNBRCb {
         address _to,
         uint256 _value
     ) public returns (bool success) {
+        require(_value <= balanceOf[_from]); // balance less from the account
+        require(_value <= allowance[_from][msg.sender]); //value must be less than the approved amount for the exchange,
+
         allowance[_from][msg.sender] = allowance[_from][msg.sender] - _value;
         _transfer(_from, _to, _value);
         return true;

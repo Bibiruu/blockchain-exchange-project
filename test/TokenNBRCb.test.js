@@ -1,7 +1,7 @@
 //chai testing environment
 import { tokens, EVM_REVERT } from "./helpers";
 
-let TokenNBRCb = artifacts.require("./TokenNBRCb");
+const TokenNBRCb = artifacts.require("./TokenNBRCb");
 
 require("chai").use(require("chai-as-promised")).should();
 
