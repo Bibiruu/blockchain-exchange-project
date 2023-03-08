@@ -17,6 +17,8 @@ pragma solidity ^0.8.12;
 [ ]fill order
  */
 
+ import "./TokenNBRCb.sol";
+
 contract Exchange {
     //variables
     address public feeAccount; // the account that receives exchange fees
@@ -25,5 +27,12 @@ contract Exchange {
     constructor(address _feeAccount, uint256 _feePercent) {
         feeAccount = _feeAccount;
         feePercent = _feePercent;
+    }
+
+    function depositToken() public {
+        //which token?
+        //how much?
+        //manage deposit
+        //send tokens to this contract
     }
 }
