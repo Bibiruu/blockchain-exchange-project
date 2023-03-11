@@ -17,7 +17,7 @@ pragma solidity ^0.8.12;
 [ ]fill order
  */
 
- import "./TokenNBRCb.sol";
+import "./TokenNBRCb.sol";
 
 contract Exchange {
     //variables
@@ -29,10 +29,10 @@ contract Exchange {
         feePercent = _feePercent;
     }
 
-    function depositToken() public {
-        //which token?
-        //how much?
-        //manage deposit
-        //send tokens to this contract
+    function depositToken(address _sender, address _token, uint _amount) public { //which token and how much
+        TokenNBRCb(_token).transferFrom(msg.sender, _sender, _amount);
+            //send tokens to this contract
+        //manage deposit - update balance
+        //emit event
     }
 }
