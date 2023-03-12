@@ -29,8 +29,8 @@ contract Exchange {
         feePercent = _feePercent;
     }
 
-    function depositToken(address _sender, address _token, uint _amount) public { //which token and how much
-        TokenNBRCb(_token).transferFrom(msg.sender, _sender, _amount);
+    function depositToken(address _token, uint _amount) public { //which token and how much
+        TokenNBRCb(_token).transferFrom(msg.sender, address(this), _amount);
             //send tokens to this contract
         //manage deposit - update balance
         //emit event
