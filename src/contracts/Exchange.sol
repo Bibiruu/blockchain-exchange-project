@@ -21,15 +21,35 @@ import "./TokenNBRCb.sol";
 
 contract Exchange {
     //variables
-    address public feeAccount; // the account that receives exchange fees
+    // the account that receives exchange fees
+    address public feeAccount; 
     uint256 public feePercent;
-    address constant ETHER = address(0); //store Ether in tokens mapping with blank address
-    //address public owner = msg.sender;
+    //store Ether in tokens mapping with blank address
+    address constant ETHER = address(0); 
 
-    mapping(address => mapping(address => uint256)) public tokens; // key,value
+    mapping(address => mapping(address => uint256)) public tokens; 
+    mapping(uint => _Order) public orders; //allowing to read all the orders ffrom mapping
 
     event Deposit(address token, address user, uint256 amount, uint256 balance);
     event Withdraw(address token, address user, uint amount, uint balance);
+
+    //storing the order
+    struct _Order {
+        uint id;
+        //who created the order
+        address user; 
+        // the token they want to purchase : tokenChoice?
+        address tokenGet;
+        uint amountGet;
+        //the token they want to use in the trade
+        address tokenGive;
+        uint amountGive;
+        uint timestamp;
+    }
+
+    //a way to store the order
+    //add the order to storage
+
 
     constructor(address _feeAccount, uint256 _feePercent) {
         feeAccount = _feeAccount;
