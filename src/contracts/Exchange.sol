@@ -28,23 +28,24 @@ contract Exchange {
     address constant ETHER = address(0); 
 
     mapping(address => mapping(address => uint256)) public tokens; 
-    mapping(uint => _Order) public orders; //allowing to read all the orders ffrom mapping
+    mapping(uint256 => _Order) public orders; //storing order, allowing to read all the orders ffrom mapping
+
 
     event Deposit(address token, address user, uint256 amount, uint256 balance);
-    event Withdraw(address token, address user, uint amount, uint balance);
+    event Withdraw(address token, address user, uint256 amount, uint256 balance);
 
     //storing the order
     struct _Order {
-        uint id;
+        uint256 id;
         //who created the order
         address user; 
         // the token they want to purchase : tokenChoice?
         address tokenGet;
-        uint amountGet;
+        uint256 amountGet;
         //the token they want to use in the trade
         address tokenGive;
-        uint amountGive;
-        uint timestamp;
+        uint256 amountGive;
+        uint256 timestamp;
     }
 
     //a way to store the order
@@ -65,14 +66,14 @@ contract Exchange {
         emit Deposit(ETHER, msg.sender, msg.value, tokens[ETHER][msg.sender]);
     }
 
-    function withdrawEther(address payable owner, uint _amount) public {
+    function withdrawEther(address payable owner, uint256 _amount) public {
         require(tokens[ETHER][msg.sender] >= _amount); //eth has to be more or equal to the amount
         tokens[ETHER][msg.sender] = tokens[ETHER][msg.sender] - _amount;
         owner.transfer(_amount);
         emit Withdraw(ETHER, msg.sender, _amount, tokens[ETHER][msg.sender]);
     }
 
-    function depositToken(address _token, uint _amount) public {
+    function depositToken(address _token, uint256 _amount) public {
         //dont allow ether deposit
         require(_token != ETHER);
         //which token?
@@ -86,7 +87,7 @@ contract Exchange {
         //send tokens to this contract
     }
 
-    function withdrawToken(address _token, uint _amount) public {
+    function withdrawToken(address _token, uint256 _amount) public {
         require(_token != ETHER);
         require(tokens[_token][msg.sender] >= _amount); //amount check
         tokens[_token][msg.sender] = tokens[_token][msg.sender] - _amount;
@@ -100,4 +101,9 @@ contract Exchange {
     ) public view returns (uint256) {
         return tokens[_token][_user];
     }
+
+    /*function makeOrder(address _tokenGet, uint256256 _amountGet, address _tokenGive, uint256256 _amountGive ) public {
+        orderCount = orderCount + 1;
+        orders[orderCount] = _Order(_id,msg.sender,_tokenGet, _amountGet, _tokenGive, _amountGive, now);
+    }*/
 }
