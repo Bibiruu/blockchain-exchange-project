@@ -216,11 +216,32 @@ contract("Exchange", ([deployer, feeAccount, user1]) => {
 
   describe("checking the balance of token", async () => {
     beforeEach(async () => {
-      await exchange.depositEther({ from : user1, value: ether(1)});
+      await exchange.depositEther({ from: user1, value: ether(1) });
     });
     it("returns token balances", async () => {
-      const result = await exchange.balanceOf(ETHER_ADDRESS, user1)
-      result.toString().should.equal(ether(1).toString())
-    })
+      const result = await exchange.balanceOf(ETHER_ADDRESS, user1);
+      result.toString().should.equal(ether(1).toString());
+    });
+  });
+
+  describe("making orders", async () => {
+    let result;
+
+    beforeEach(async () => {
+      result = await exchange.makeOrder(
+        token.address,
+        tokens(1),
+        ETHER_ADDRESS,
+        ether(1),
+        { from: user1 }
+      );
+    });
+    //tokenGet = token.address
+    //tokenGive = ether adress
+
+    it("tracks the newly created token", async () => {
+      const orderCount = await exchange.orderCount()
+      orderCount.toString().should.equal('1')
+    });
   });
 });
