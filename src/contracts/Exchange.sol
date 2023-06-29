@@ -7,11 +7,11 @@ pragma solidity ^0.8.12;
 
 /**list
 [x]set the fee
-[ ]deposit ether
-[ ]withdraw ether
-[ ]deposit tokens
-[ ]withdraw tokens
-[ ]check balances
+[x]deposit ether
+[x]withdraw ether
+[x]deposit tokens
+[x]withdraw tokens
+[x]check balances
 [ ]make order
 [ ]cancel order
 [ ]fill order
@@ -21,7 +21,6 @@ import "./TokenNBRCb.sol";
 
 contract Exchange {
     //variables
-    // the account that receives exchange fees
     address public feeAccount;
     uint256 public feePercent;
     //store Ether in tokens mapping with blank address
@@ -30,7 +29,8 @@ contract Exchange {
     uint256 public orderCount;
 
     mapping(address => mapping(address => uint256)) public tokens;
-    mapping(uint256 => _Order) public orders; //storing order, allowing to read all the orders ffrom mapping
+    //storing order, allowing to read all the orders from mapping
+    mapping(uint256 => _Order) public orders;
 
     //triggers
     event Deposit(address token, address user, uint256 amount, uint256 balance);
@@ -51,7 +51,7 @@ contract Exchange {
         uint256 timestamp
     );
     //structs
-    //storing the order
+    //composite data of order
     struct _Order {
         uint256 id;
         //who created the order

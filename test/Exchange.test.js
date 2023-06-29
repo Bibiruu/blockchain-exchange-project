@@ -229,19 +229,41 @@ contract("Exchange", ([deployer, feeAccount, user1]) => {
 
     beforeEach(async () => {
       result = await exchange.makeOrder(
+        //tokenGet = token.address
+        //tokenGive = ether adress
         token.address,
         tokens(1),
         ETHER_ADDRESS,
         ether(1),
-        { from: user1 }
-      );
+        { from: user1 });
     });
-    //tokenGet = token.address
-    //tokenGive = ether adress
+ 
 
     it("tracks the newly created token", async () => {
       const orderCount = await exchange.orderCount()
       orderCount.toString().should.equal('1')
+      const order = await exchange.orders('1')
+      order.id.toString().should.equal('1', "order id is correct")
+      order.user.should.equal(user1, "user is correct")
+      order.tokenGet.should.equal(token.address, "tokenGet success")
+      order.amountGet.toString().should.equal(tokens(1).toString(), "amountGet success")
+      order.tokenGive.should.equal(ETHER_ADDRESS, "tokenGive success")
+      order.amountGive.toString().should.equal(ether(1).toString(), "amountGive success")
+      order.timestamp.toString().length.should.be.at.least(1, "timestamp present")
+    });
+
+    it("emits an 'Order' event", async () => {
+      const log = result.logs[0]
+      const orderCount = await exchange.orderCount()
+      orderCount.toString().should.equal('1')
+      const order = await exchange.orders('1')
+      order.id.toString().should.equal('1', "order id is correct")
+      order.user.should.equal(user1, "user is correct")
+      order.tokenGet.should.equal(token.address, "tokenGet success")
+      order.amountGet.toString().should.equal(tokens(1).toString(), "amountGet success")
+      order.tokenGive.should.equal(ETHER_ADDRESS, "tokenGive success")
+      order.amountGive.toString().should.equal(ether(1).toString(), "amountGive success")
+      order.timestamp.toString().length.should.be.at.least(1, "timestamp present")
     });
   });
 });
