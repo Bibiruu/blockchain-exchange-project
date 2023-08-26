@@ -50,11 +50,13 @@ contract Exchange {
         uint256 amountGive,
         uint256 timestamp
     );
+
     //structs
     //composite data of order
+    //a way to store the order
+    //add the order to storage
     struct _Order {
         uint256 id;
-        //who created the order
         address user;
         // the token they want to purchase : tokenChoice?
         address tokenGet;
@@ -65,9 +67,7 @@ contract Exchange {
         uint256 timestamp;
     }
 
-    //a way to store the order
-    //add the order to storage
-
+    
     constructor(address _feeAccount, uint256 _feePercent) {
         feeAccount = _feeAccount;
         feePercent = _feePercent;

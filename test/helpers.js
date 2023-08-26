@@ -10,7 +10,7 @@ export const ether = (numberOfTokens) => {
   );
 };
 
-//same as ether
+//same as ethers
 //example 1000 tokens = 1 eth
 export const tokens = (n) => ether(n)
 

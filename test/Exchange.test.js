@@ -229,8 +229,9 @@ contract("Exchange", ([deployer, feeAccount, user1]) => {
 
     beforeEach(async () => {
       result = await exchange.makeOrder(
-        //tokenGet = token.address
-        //tokenGive = ether adress
+        //tokenGet = token.address (NBRCb)
+        //tokenGive = ether adress (token received)
+        //releasing order, from the address, how much, what to trade for it, how much and from who.
         token.address,
         tokens(1),
         ETHER_ADDRESS,
