@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-undef
-//const { artifacts } = require("truffle");
+const { artifacts } = require("truffle");
 const Migrations = artifacts.require("Migrations");
 
 module.exports = function (deployer) {

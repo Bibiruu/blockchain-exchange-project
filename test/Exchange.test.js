@@ -1,14 +1,17 @@
+/* eslint-disable no-unused-vars */
 // eslint-disable-next-line no-undef
 //chai testing environment
 import { should, use } from "chai";
 import Web3 from "web3";
 import { tokens, ether, EVM_REVERT, ETHER_ADDRESS } from "./helpers";
 
+const { artifacts } = require("truffle");
 const Token = artifacts.require("./TokenNBRCb");
 const Exchange = artifacts.require("./Exchange");
 
 require("chai").use(require("chai-as-promised")).should();
 
+// eslint-disable-next-line no-undef
 contract("Exchange", ([deployer, feeAccount, user1]) => {
   let token;
   let exchange;
