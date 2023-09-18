@@ -156,16 +156,16 @@ contract Exchange {
         );
     }
 
-    function cancelOrder(uint256 _id) public {
+    function cancelOrder(uint256 _id, address _order) public {
         orderCancelled[_id] = true;
         emit Cancel(
-            id,
-            user,
-            tokenGet,
-            amountGet,
-            tokenGive,
-            amountGive,
-            timestamp
+            _order._id,
+            msg.sender,
+            _order._tokenGet,
+            _order._amountGet,
+            _order._tokenGive,
+            _order._amountGive,
+            block.timestamp
         );
     }
 }
