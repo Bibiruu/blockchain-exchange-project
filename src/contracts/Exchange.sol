@@ -156,15 +156,20 @@ contract Exchange {
         );
     }
 
-    function cancelOrder(uint256 _id, address _order) public {
+    function cancelOrder(uint256 _id) public {
+        //fetching order from the mapping, _order is variable,assigning the storing in it
+        _Order storage _order = orders[_id];
+        require(address(_order.user) == msg.sender);
+        // only valid orders that exist
+        require(_order.id == _id) 
         orderCancelled[_id] = true;
         emit Cancel(
-            _order._id,
+            _order.id,
             msg.sender,
-            _order._tokenGet,
-            _order._amountGet,
-            _order._tokenGive,
-            _order._amountGive,
+            _order.tokenGet,
+            _order.amountGet,
+            _order.tokenGive,
+            _order.amountGive,
             block.timestamp
         );
     }

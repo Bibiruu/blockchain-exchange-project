@@ -270,4 +270,11 @@ contract("Exchange", ([deployer, feeAccount, user1]) => {
       order.timestamp.toString().length.should.be.at.least(1, "timestamp present")
     });
   });
+
+  describe("order action", async () => {
+    beforeEach(async () => {
+      //user1 deposits ether
+      await exchange.depositEther({ from:user1, value:ether(1)})
+    })
+  })
 });
