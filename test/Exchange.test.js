@@ -239,42 +239,81 @@ contract("Exchange", ([deployer, feeAccount, user1]) => {
         tokens(1),
         ETHER_ADDRESS,
         ether(1),
-        { from: user1 });
+        { from: user1 }
+      );
     });
- 
 
     it("tracks the newly created token", async () => {
-      const orderCount = await exchange.orderCount()
-      orderCount.toString().should.equal('1')
-      const order = await exchange.orders('1')
-      order.id.toString().should.equal('1', "order id is correct")
-      order.user.should.equal(user1, "user is correct")
-      order.tokenGet.should.equal(token.address, "tokenGet success")
-      order.amountGet.toString().should.equal(tokens(1).toString(), "amountGet success")
-      order.tokenGive.should.equal(ETHER_ADDRESS, "tokenGive success")
-      order.amountGive.toString().should.equal(ether(1).toString(), "amountGive success")
-      order.timestamp.toString().length.should.be.at.least(1, "timestamp present")
+      const orderCount = await exchange.orderCount();
+      orderCount.toString().should.equal("1");
+      const order = await exchange.orders("1");
+      order.id.toString().should.equal("1", "order id is correct");
+      order.user.should.equal(user1, "user is correct");
+      order.tokenGet.should.equal(token.address, "tokenGet success");
+      order.amountGet
+        .toString()
+        .should.equal(tokens(1).toString(), "amountGet success");
+      order.tokenGive.should.equal(ETHER_ADDRESS, "tokenGive success");
+      order.amountGive
+        .toString()
+        .should.equal(ether(1).toString(), "amountGive success");
+      order.timestamp
+        .toString()
+        .length.should.be.at.least(1, "timestamp present");
     });
 
     it("emits an 'Order' event", async () => {
-      const log = result.logs[0]
-      const orderCount = await exchange.orderCount()
-      orderCount.toString().should.equal('1')
-      const order = await exchange.orders('1')
-      order.id.toString().should.equal('1', "order id is correct")
-      order.user.should.equal(user1, "user is correct")
-      order.tokenGet.should.equal(token.address, "tokenGet success")
-      order.amountGet.toString().should.equal(tokens(1).toString(), "amountGet success")
-      order.tokenGive.should.equal(ETHER_ADDRESS, "tokenGive success")
-      order.amountGive.toString().should.equal(ether(1).toString(), "amountGive success")
-      order.timestamp.toString().length.should.be.at.least(1, "timestamp present")
+      const log = result.logs[0];
+      const orderCount = await exchange.orderCount();
+      orderCount.toString().should.equal("1");
+      const order = await exchange.orders("1");
+      order.id.toString().should.equal("1", "order id is correct");
+      order.user.should.equal(user1, "user is correct");
+      order.tokenGet.should.equal(token.address, "tokenGet success");
+      order.amountGet
+        .toString()
+        .should.equal(tokens(1).toString(), "amountGet success");
+      order.tokenGive.should.equal(ETHER_ADDRESS, "tokenGive success");
+      order.amountGive
+        .toString()
+        .should.equal(ether(1).toString(), "amountGive success");
+      order.timestamp
+        .toString()
+        .length.should.be.at.least(1, "timestamp present");
     });
   });
 
   describe("order action", async () => {
     beforeEach(async () => {
       //user1 deposits ether
-      await exchange.depositEther({ from:user1, value:ether(1)})
-    })
-  })
+      await exchange.depositEther({ from: user1, value: ether(1) });
+      //user1 buys tokens with ether
+      //token address,amount,ether address,amount
+      await exchange.makeOrder(
+        token.address,
+        tokens(1),
+        ETHER_ADDRESS,
+        ether(1)
+      );
+    });
+
+    describe("cancelling orders", async () => {
+      let result;
+
+      describe("success", async () => {
+        beforeEach(async () => {
+          result = await exchange.cancelOrder("1", { from: user1 });
+        });
+      });
+
+      it("updates cancelled orders", async () => {
+        const orderCancelled = await exchange.orderCancelled(1);
+        orderCancelled.should.equal(true);
+      });
+    });
+
+    describe("failure", (async) => {
+      
+    });
+  });
 });
