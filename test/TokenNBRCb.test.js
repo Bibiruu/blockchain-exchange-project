@@ -2,11 +2,13 @@
 //chai testing environment
 import { tokens, EVM_REVERT } from "./helpers";
 
+const { artifacts } = require("truffle");
 const TokenNBRCb = artifacts.require("./TokenNBRCb");
 
 require("chai").use(require("chai-as-promised")).should();
 
-contract("TokenNBRCb", ([deployer, receiver, exchange]) => {
+// eslint-disable-next-line no-undef
+contract ("TokenNBRCb", ([deployer, receiver, exchange]) => {
   let token;
   const name = "Nobrac";
   const symbol = "NBRCb";

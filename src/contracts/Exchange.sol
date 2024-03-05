@@ -161,7 +161,7 @@ contract Exchange {
         _Order storage _order = orders[_id];
         require(address(_order.user) == msg.sender);
         // only valid orders that exist
-        require(_order.id == _id) 
+        require(_order.id == _id);
         orderCancelled[_id] = true;
         emit Cancel(
             _order.id,
