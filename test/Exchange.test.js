@@ -312,7 +312,7 @@ contract("Exchange", ([deployer, feeAccount, user1]) => {
       });
     });
 
-    describe("failure", (async) => {
+    describe("failure", async () => {
       
     });
   });
